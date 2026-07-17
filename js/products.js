@@ -1,36 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
+const API = "http://localhost:5001/api/products";
 
-<meta charset="UTF-8">
+fetch(API)
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+.then(res => res.json())
 
-<title>Products</title>
+.then(products => {
 
-<link rel="stylesheet" href="css/style.css">
+    const container = document.getElementById("products");
 
-</head>
+    if(!container) return;
 
-<body>
+    products.forEach(product => {
 
-<header>
+        container.innerHTML += `
 
-<h1>Products</h1>
+        <div class="card">
 
-<nav>
+            <img src="image/${product.image}" width="200">
 
-<a href="index.html">Home</a>
+            <h3>${product.name}</h3>
 
-<a href="cart.html">Cart</a>
+            <p>₹${product.price}</p>
 
-</nav>
+            <button onclick="addToCart(${product.id})">
+                Add To Cart
+            </button>
 
-</header>
+        </div>
 
-<div id="products" class="products"></div>
+        `;
 
-<script src="js/products.js"></script>
+    });
 
-</body>
-</html>
+});
+
+
+function addToCart(id){
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart.push(id);
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert("Added to Cart");
+
+}
